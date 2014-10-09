@@ -1,12 +1,17 @@
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 public class Car implements Runnable{
 	private Game g;
 	private int[] pos;
 	private char dir;
+	private boolean player;
 
-	public Car(Game g, int[] pos){
+	public Car(Game g, int[] pos, boolean player){
 		this.g = g;
 		this.pos = pos;
 		this.dir = 'U';
+		this.player = player;
 	}
 
 	public void run(){
@@ -17,7 +22,6 @@ public class Car implements Runnable{
 		    System.out.println(e);
 			}
 		}
-		System.out.println("end while");
 	}
 
 	private int drive(){
@@ -37,4 +41,7 @@ public class Car implements Runnable{
 		}
 		return 0;
 	}
+}
+
+class Key extends KeyAdapter {
 }

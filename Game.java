@@ -8,6 +8,7 @@ public class Game {
 	Integer flags;
 	int posV[];
 	int posE[][];
+	private Interface window;
 	
   public Game(char[][] map, int[] posV, int[][] posE) {
   	this.map = map;
@@ -15,6 +16,7 @@ public class Game {
 		this.posE = posE;
 		this.life = 1;
 		this.flags = 5;
+		this.window = new Interface();
   }
 
   public int play() {
