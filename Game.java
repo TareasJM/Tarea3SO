@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Console;
 
 public class Game {
 	char map[][] = new char[20][40];
@@ -26,6 +27,10 @@ public class Game {
 			try {
 		  	Runtime.getRuntime().exec("clear");
 		  	printMap();
+        Console console = System.console();
+        System.out.println("Movimientos: W (up) - S (down) - A (left) - D (right)");
+        String input = console.readLine("Ingrese movimiento:\n");
+        v.setDir(input);    
 			  Thread.sleep(150);
 			} catch (Exception e) {
 		    System.out.println(e);
