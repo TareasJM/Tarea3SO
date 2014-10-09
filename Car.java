@@ -12,9 +12,9 @@ public class Car implements Runnable{
 	public void run(){
 		while(drive() == 0){
 			try {
-			  Thread.sleep(300);
+				Thread.sleep(300);
 			} catch (Exception e) {
-		    System.out.println(e);
+		    	System.out.println(e);
 			}
 		}
 		System.out.println("end while");
@@ -27,7 +27,6 @@ public class Car implements Runnable{
 				prev = g.map[pos[0]-1][pos[1]];
 				g.map[pos[0]-1][pos[1]] = g.map[pos[0]][pos[1]];
 				g.map[pos[0]][pos[1]] = ' '; 
-				g.map[pos[0]-1][pos[1]] = 'V'; 
 				pos[0]--;
 			}
 			else if (dir == "S") {
@@ -52,7 +51,7 @@ public class Car implements Runnable{
 				pos[1]++;
 			}
 
-			else if (prev == '#') {
+			if (prev == '#') {
 				g.decLife();
 				return 1;
 			}
