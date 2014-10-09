@@ -2,8 +2,10 @@ import java.io.BufferedReader;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Game extends JFrame{
+public class Game extends JFrame implements KeyListener{
   char map[][] = new char[20][40];
   Integer life;
   Integer flags;
@@ -11,6 +13,7 @@ public class Game extends JFrame{
   int posE[][];
   JPanel main;
   JLabel blocks[];
+  Car carV;
   
   public Game(char[][] map, int[] posV, int[][] posE) throws IOException{
     this.map = map;
@@ -19,6 +22,7 @@ public class Game extends JFrame{
     this.life = 1;
     this.flags = 5;
     blocks = new JLabel[800];
+    addKeyListener(this);
     setTitle("Rali equis");
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setResizable(false);
@@ -37,8 +41,8 @@ public class Game extends JFrame{
   }
 
   public int play() {
-    Car v = new Car(this, posV, true);
-    Thread vThread = new Thread(v);
+    this.carV = new Car(this, posV, true);
+    Thread vThread = new Thread(carV);
     vThread.start();
 
     while(getLife()>0){
@@ -100,5 +104,22 @@ public class Game extends JFrame{
     synchronized(this.flags){
       this.flags--;
     }
+  }
+
+  public void keyTyped(KeyEvent e) {
+  }
+
+  public void keyPressed(KeyEvent e) {
+  }
+
+  public void keyReleased(KeyEvent e) {
+    if(e.getKeyCode()== KeyEvent.VK_RIGHT)
+      this.carV.setDir('R');
+    else if(e.getKeyCode()== KeyEvent.VK_LEFT)
+      this.carV.setDir('L');
+    else if(e.getKeyCode()== KeyEvent.VK_DOWN)
+      this.carV.setDir('D');
+    else if(e.getKeyCode()== KeyEvent.VK_UP)
+      this.carV.setDir('U');
   }
 } 

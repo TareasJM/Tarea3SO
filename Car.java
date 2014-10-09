@@ -10,7 +10,7 @@ public class Car implements Runnable{
 	public Car(Game g, int[] pos, boolean player){
 		this.g = g;
 		this.pos = pos;
-		this.dir = 'W';
+		this.dir = 'U';
 		this.player = player;
 	}
 
@@ -27,27 +27,27 @@ public class Car implements Runnable{
 	private int drive(){
 		char prev = ' ';
 		synchronized(g.map){
-			if (dir == 'W') {
+			if (dir == 'U') {
 				prev = g.map[pos[0]-1][pos[1]];
 				g.map[pos[0]-1][pos[1]] = g.map[pos[0]][pos[1]];
 				g.map[pos[0]][pos[1]] = ' '; 
 				pos[0]--;
 			}
-			else if (dir == 'S') {
+			else if (dir == 'D') {
 				prev = g.map[pos[0]+1][pos[1]];
 				g.map[pos[0]+1][pos[1]] = g.map[pos[0]][pos[1]];
 				g.map[pos[0]][pos[1]] = ' '; 
 				g.map[pos[0]+1][pos[1]] = 'V'; 
 				pos[0]++;
 			}
-			else if (dir == 'A') {
+			else if (dir == 'L') {
 				prev = g.map[pos[0]][pos[1]-1];
 				g.map[pos[0]][pos[1]-1] = g.map[pos[0]][pos[1]];
 				g.map[pos[0]][pos[1]] = ' '; 
 				g.map[pos[0]][pos[1]-1] = 'V'; 
 				pos[1]--;
 			}
-			else if (dir == 'D') {
+			else if (dir == 'R') {
 				prev = g.map[pos[0]][pos[1]+1];
 				g.map[pos[0]][pos[1]+1] = g.map[pos[0]][pos[1]];
 				g.map[pos[0]][pos[1]] = ' '; 
@@ -61,5 +61,9 @@ public class Car implements Runnable{
 			}
 		}
 		return 0;
+	}
+
+	public void setDir(char dir){
+		this.dir = dir;
 	}
 }
