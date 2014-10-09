@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Console;
 
 public class Main {
 	
@@ -8,8 +9,8 @@ public class Main {
 		char map[][] = new char[20][40];
 		int posV[] = new int[2];
 		int posE[][] = new int[4][2];
-  	int e = 0;
-  	BufferedReader in = new BufferedReader(new FileReader("input.txt")); 
+	  	int e = 0;
+	  	BufferedReader in = new BufferedReader(new FileReader("input.txt")); 
 		for (int i = 0; i < 20; i++) {
 			String line = in.readLine();
 			for (int j=0; j < line.length(); j++) {
@@ -29,6 +30,8 @@ public class Main {
 		Game g = new Game(map, posV, posE);
 
 		g.play();
+
+
 		
   }
 
