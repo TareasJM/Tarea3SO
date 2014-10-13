@@ -4,6 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.applet.*;
 
 public class Game extends JFrame implements KeyListener{
   char map[][] = new char[20][40];
@@ -13,9 +16,12 @@ public class Game extends JFrame implements KeyListener{
   int posV[];
   int posE[][];
   JPanel main;
-  JLabel blocks[];
+  // JLabel blocks[];
+  JBackgroundPanel blocks[];
   Car carV;
   Car carE[];
+  BufferedImage[] imagenes;
+  AudioClip aClip;
   
   public Game(char[][] map, int[] posV, int[][] posE) throws IOException{
     this.map = map;
@@ -25,7 +31,7 @@ public class Game extends JFrame implements KeyListener{
     this.flags = 4;
     this.reset = new Boolean[5];
     this.reset[0] = this.reset[1] = this.reset[2] = this.reset[3] = this.reset[4] = false;
-    blocks = new JLabel[800];
+    blocks = new JBackgroundPanel[800];
     addKeyListener(this);
     setTitle("Rali equis");
     setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,9 +39,46 @@ public class Game extends JFrame implements KeyListener{
     setLayout(new GridLayout(1,2));
     main = new JPanel();
     main.setLayout(new GridLayout(20,40)); //FILA / COLUMNAS
+    this.aClip = Applet.newAudioClip("/resources/rally.mp3");
+    aClip.play();
+    imagenes = new BufferedImage[6];
+
+    imagenes[0]=ImageIO.read(new File("./resources/carV.png"));
+    imagenes[1]=ImageIO.read(new File("./resources/carE.png"));
+    imagenes[2]=ImageIO.read(new File("./resources/wall.png"));
+    imagenes[3]=ImageIO.read(new File("./resources/grass.png"));
+    imagenes[4]=ImageIO.read(new File("./resources/bomb.png"));
+    imagenes[5]=ImageIO.read(new File("./resources/flag.jpg"));
+
     for (int i=0; i < 20; i++ ) {
       for (int j=0; j < 40; j++ ) {
-        blocks[i*40 + j] = new JLabel(map[i][j]+"");
+        blocks[i*40+j] = new JBackgroundPanel();
+        blocks[i*40+j].setPreferredSize(new Dimension(30,30));
+        if(map[i][j] == 'V')
+        {
+          blocks[i*40 + j].setBackgroundPanel(imagenes[0]);
+        }
+        else if(map[i][j] == 'E')
+        {
+          blocks[i*40 + j].setBackgroundPanel(imagenes[1]);
+        }
+        else if(map[i][j] == '#')
+        {
+          blocks[i*40 + j].setBackgroundPanel(imagenes[2]);
+        }
+        else if(map[i][j] == ' ')
+        {
+          blocks[i*40 + j].setBackgroundPanel(imagenes[3]);
+        }
+        else if(map[i][j] == 'O')
+        {
+          blocks[i*40 + j].setBackgroundPanel(imagenes[4]);
+        }
+        else if(map[i][j] == 'B')
+        {
+          blocks[i*40 + j].setBackgroundPanel(imagenes[5]);
+        }
+        blocks[i*40+j].setVisible(true);
         main.add(blocks[i*40 + j]);
       }
     } 
@@ -93,16 +136,36 @@ public class Game extends JFrame implements KeyListener{
     //}
     for (int i=0; i < 20; i++ ) {
       for (int j=0; j < 40; j++ ) {
-        blocks[i*40 + j].setText(m[i][j]+"");
+
+        if(m[i][j] == 'V')
+        {
+          blocks[i*40 + j].setBackgroundPanel(this.imagenes[0]);
+        }
+        else if(m[i][j] == 'E')
+        {
+          blocks[i*40 + j].setBackgroundPanel(this.imagenes[1]);
+        }
+        else if(m[i][j] == ' ')
+        {
+          blocks[i*40 + j].setBackgroundPanel(this.imagenes[3]);
+        }
+
+         else if(m[i][j] == 'B')
+        {
+          blocks[i*40 + j].setBackgroundPanel(this.imagenes[5]);
+        }
+     
       }
     }  
-    pack();
+    revalidate();
+    repaint();
+
   }
 
   public char[][] getMap(){
     synchronized(this.map){
       return this.map;
-    }
+     }
   }
 
   public int getLife(){
@@ -170,4 +233,27 @@ public class Game extends JFrame implements KeyListener{
   {
     return this.carV.getPos();
   }
+
+  public class JBackgroundPanel extends JPanel {
+    private BufferedImage img;
+    private int color;
+
+    public void setBackgroundPanel(BufferedImage img) {
+      this.img = img;
+    }
+
+    public int getColor(){
+      return this.color;
+    }
+
+    public void setColor(int color){
+      this.color = color;
+    }
+
+    @Override
+      protected void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      g.drawImage(img, 0, 0, 30, 30, null);
+    }
+    }
 } 
