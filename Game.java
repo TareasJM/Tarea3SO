@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.applet.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Game extends JFrame implements KeyListener{
   char map[][] = new char[20][40];
@@ -21,8 +23,12 @@ public class Game extends JFrame implements KeyListener{
   Car carV;
   Car carE[];
   BufferedImage[] imagenes;
-  AudioClip aClip;
-  
+  Sound aClip;
+  Sound aClip2;
+  Sound aClip3;
+  ImageIcon icon1;
+  ImageIcon icon2;
+
   public Game(char[][] map, int[] posV, int[][] posE) throws IOException{
     this.map = map;
     this.posV = posV;
@@ -39,16 +45,19 @@ public class Game extends JFrame implements KeyListener{
     setLayout(new GridLayout(1,2));
     main = new JPanel();
     main.setLayout(new GridLayout(20,40)); //FILA / COLUMNAS
-    this.aClip = Applet.newAudioClip("/resources/rally.mp3");
-    aClip.play();
+    // this.aClip = Applet.newAudioClip(
+    //         new java.net.URL("file://"+System.getProperty("user.dir")+"/resources/rally.wav"));
+    // aClip.play();
     imagenes = new BufferedImage[6];
 
-    imagenes[0]=ImageIO.read(new File("./resources/carV.png"));
-    imagenes[1]=ImageIO.read(new File("./resources/carE.png"));
-    imagenes[2]=ImageIO.read(new File("./resources/wall.png"));
-    imagenes[3]=ImageIO.read(new File("./resources/grass.png"));
-    imagenes[4]=ImageIO.read(new File("./resources/bomb.png"));
+    imagenes[0]=ImageIO.read(new File("./resources/carV.jpg"));
+    imagenes[1]=ImageIO.read(new File("./resources/carE.jpg"));
+    imagenes[2]=ImageIO.read(new File("./resources/wall.jpg"));
+    imagenes[3]=ImageIO.read(new File("./resources/grass.jpg"));
+    imagenes[4]=ImageIO.read(new File("./resources/bomb.jpg"));
     imagenes[5]=ImageIO.read(new File("./resources/flag.jpg"));
+    this.icon1  = new ImageIcon("./resources/hf.jpg");
+    this.icon2  = new ImageIcon("./resources/go.jpg");
 
     for (int i=0; i < 20; i++ ) {
       for (int j=0; j < 40; j++ ) {
@@ -94,30 +103,52 @@ public class Game extends JFrame implements KeyListener{
     this.carE[1] = new Car(this, posE[1], false,2);
     this.carE[2] = new Car(this, posE[2], false,3);
     this.carE[3] = new Car(this, posE[3], false,4);
+    this.aClip = new Sound(this,"10secs.wav",0);
+    this.aClip2 = new Sound(this,"go.wav",1);
+    this.aClip3 = new Sound(this,"win.wav",1);
+
     Thread vThread = new Thread(carV);
     Thread e0Thread = new Thread(carE[0]);
     Thread e1Thread = new Thread(carE[1]);
     Thread e2Thread = new Thread(carE[2]);
     Thread e3Thread = new Thread(carE[3]);
+    // Thread sThread = new Thread(aClip);
     vThread.start();
     e0Thread.start();
     e1Thread.start();
     e2Thread.start();
     e3Thread.start();
+    this.aClip.run();
 
     while(getLife()>0 && getFlags()>0){
 
       try {
+
         printMap();
         Thread.sleep(150);
       } catch (Exception e) {
         System.out.println(e);
       }
     }
-
-    System.out.println("salio while");
+    // sThread.stop();
+    this.aClip.stop();
     setVisible(false);
     dispose();
+    if(getLife() == 0)
+    { 
+      this.aClip2.run();
+      String message = "<html><body><div width='200px' align='center'>Has perdido Rally - equis</div></body></html>";
+      JLabel messageLabel = new JLabel(message);
+      JOptionPane.showMessageDialog(null, messageLabel,"Que pena :(", JOptionPane.ERROR_MESSAGE, icon2);
+    }
+    else
+    { 
+      this.aClip3.run();
+      String message = "<html><body><div width='200px' align='center'>Has ganado Rally - equis!</div></body></html>";
+      JLabel messageLabel = new JLabel(message);
+      JOptionPane.showMessageDialog(null, messageLabel, "yupi :)", JOptionPane.INFORMATION_MESSAGE,icon1);
+    }
+    
     
     return 0;
   }
@@ -256,4 +287,5 @@ public class Game extends JFrame implements KeyListener{
       g.drawImage(img, 0, 0, 30, 30, null);
     }
     }
+
 } 

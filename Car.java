@@ -1,5 +1,6 @@
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 
 public class Car implements Runnable{
 	private Game g;
@@ -39,8 +40,10 @@ public class Car implements Runnable{
 		    	System.out.println(e);
 			}
 		}
+		
 		System.out.println("Termino "+this.playerInt);
 	}
+	
 
 	private int drive(){
 		if (!player) {
@@ -179,10 +182,18 @@ public class Car implements Runnable{
 					{
 						this.setDir('U');
 					}
+					// else if((dir == 'L' || dir == 'R') && posV[0] < this.pos[0])
+					// {
+					// 	this.setDir('D');
+					// }
 					else if(dir == 'U')
 					{
 						this.setDir('R');
 					}
+					// else if((dir == 'U' || dir == 'D') && posV[1] >zzz this.pos[1])
+					// {
+					// 	this.setDir('R');
+					// }
 					else if(dir == 'R')
 					{
 						this.setDir('D');
