@@ -7,8 +7,7 @@ import java.awt.event.KeyListener;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.applet.*;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class Game extends JFrame implements KeyListener{
   char map[][] = new char[20][40];
@@ -26,6 +25,7 @@ public class Game extends JFrame implements KeyListener{
   Sound aClip;
   Sound aClip2;
   Sound aClip3;
+  Sound aClip4;
   ImageIcon icon1;
   ImageIcon icon2;
 
@@ -58,6 +58,10 @@ public class Game extends JFrame implements KeyListener{
     imagenes[5]=ImageIO.read(new File("./resources/flag.jpg"));
     this.icon1  = new ImageIcon("./resources/hf.jpg");
     this.icon2  = new ImageIcon("./resources/go.jpg");
+    this.aClip4 = new Sound(this,"crash.wav",1);
+    this.aClip = new Sound(this,"music.wav",0);
+    this.aClip2 = new Sound(this,"go.wav",1);
+    this.aClip3 = new Sound(this,"win.wav",1);
 
     for (int i=0; i < 20; i++ ) {
       for (int j=0; j < 40; j++ ) {
@@ -103,9 +107,6 @@ public class Game extends JFrame implements KeyListener{
     this.carE[1] = new Car(this, posE[1], false,2);
     this.carE[2] = new Car(this, posE[2], false,3);
     this.carE[3] = new Car(this, posE[3], false,4);
-    this.aClip = new Sound(this,"10secs.wav",0);
-    this.aClip2 = new Sound(this,"go.wav",1);
-    this.aClip3 = new Sound(this,"win.wav",1);
 
     Thread vThread = new Thread(carV);
     Thread e0Thread = new Thread(carE[0]);
@@ -134,19 +135,22 @@ public class Game extends JFrame implements KeyListener{
     this.aClip.stop();
     setVisible(false);
     dispose();
-    if(getLife() == 0)
+    if(getLife() < 1)
     { 
       this.aClip2.run();
-      String message = "<html><body><div width='200px' align='center'>Has perdido Rally - equis</div></body></html>";
+      String message = "<html><body><div width='200px' align='center'>Has perdido Rali equis</div></body></html>";
       JLabel messageLabel = new JLabel(message);
-      JOptionPane.showMessageDialog(null, messageLabel,"Que pena :(", JOptionPane.ERROR_MESSAGE, icon2);
+      JOptionPane.showMessageDialog(null,  messageLabel, "Que pena :(", JOptionPane.ERROR_MESSAGE, icon2);
+      this.aClip2.stop();
     }
     else
     { 
       this.aClip3.run();
-      String message = "<html><body><div width='200px' align='center'>Has ganado Rally - equis!</div></body></html>";
+      String message = "<html><body><div width='200px' align='center'>Has ganado Rali equis!</div></body></html>";
       JLabel messageLabel = new JLabel(message);
       JOptionPane.showMessageDialog(null, messageLabel, "yupi :)", JOptionPane.INFORMATION_MESSAGE,icon1);
+      this.aClip3.stop();
+      
     }
     
     
@@ -224,11 +228,21 @@ public class Game extends JFrame implements KeyListener{
   }
 
   public void reset(){
-   
+    
+
+    aClip4.run();
     synchronized(this.reset){
 
+
      this.reset[0] = this.reset[1] = this.reset[2] = this.reset[3] = this.reset[4] = true;
+
     }
+    try
+    {
+      Thread.sleep(1000);
+    }catch (Exception e) {
+        System.out.println(e);
+      }
   }
   public void setReset(int n, Boolean r){
     synchronized(this.reset){

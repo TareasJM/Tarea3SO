@@ -2,6 +2,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
+
+
 public class Car implements Runnable{
 	private Game g;
 	private int[] pos;
@@ -33,6 +35,11 @@ public class Car implements Runnable{
       		if (this.g.getReset(this.playerInt)) {
       			resetPos();
         		this.g.setReset(this.playerInt,false);
+        	    try {
+					Thread.sleep(1500);
+				} catch (Exception e) {
+			    	System.out.println(e);
+				}
       		}	
 			try {
 				Thread.sleep(300);
@@ -104,6 +111,7 @@ public class Car implements Runnable{
 			}
 			else if(next == 'O' || next == 'E')
 			{	
+				
 				g.reset();
 				resetPos();
 				g.decLife();
@@ -138,6 +146,7 @@ public class Car implements Runnable{
 		newy = pos[0];
 		int[] posV = new int[2];
 		posV = this.g.getPosV();
+
 		if(posV[0] > this.pos[0] )
 		{
 			setDir('D');
@@ -155,6 +164,7 @@ public class Car implements Runnable{
 			setDir('R');
 		}
 		synchronized(g.map){
+
 			while(next == '#' || next == 'B' || next ==  'O' || next ==  'E')
 			{	
 				newx = pos[1];
@@ -178,21 +188,29 @@ public class Car implements Runnable{
 				}
 
 				if (next == '#' || next == 'B' || next ==  'O' || next ==  'E') {
+					// if((dir == 'L' || dir == 'R') && posV[0] >= this.pos[0] && posV[1] != this.pos[1])
+					// {
+					// 	this.setDir('D');
+					// }
 					if(dir == 'L')
 					{
 						this.setDir('U');
 					}
-					// else if((dir == 'L' || dir == 'R') && posV[0] < this.pos[0])
+					// else if((dir == 'L' || dir == 'R') && posV[0] <= this.pos[0] && posV[1] != this.pos[1])
 					// {
-					// 	this.setDir('D');
+					// 	this.setDir('U');
 					// }
 					else if(dir == 'U')
 					{
 						this.setDir('R');
 					}
-					// else if((dir == 'U' || dir == 'D') && posV[1] >zzz this.pos[1])
+					// else if((dir == 'U' || dir == 'D') && posV[1] >= this.pos[1] && posV[0] != this.pos[0])
 					// {
 					// 	this.setDir('R');
+					// }
+					// else if((dir == 'U' || dir == 'D') && posV[1] <= this.pos[1] && posV[0] != this.pos[0])
+					// {
+					// 	this.setDir('L');
 					// }
 					else if(dir == 'R')
 					{
